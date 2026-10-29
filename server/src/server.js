@@ -31,7 +31,7 @@ const corsOptions = {
     return callback(new Error("Origin is not allowed by CORS"));
   },
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
+  allowedHeaders: ["Content-Type", "Authorization", "x-admin-setup-key"],
 };
 
 app.use(cors(corsOptions));
@@ -46,7 +46,9 @@ app.get("/api/health", (req, res) => {
   const ready = mongoose.connection.readyState === 1;
   res.status(ready ? 200 : 503).json({
     ok: ready,
-    message: ready ? "Vehicle Management API is running" : "Database unavailable",
+    message: ready
+      ? "Vehicle Management API is running"
+      : "Database unavailable",
     database: ready ? "connected" : "disconnected",
     uptime: Math.floor(process.uptime()),
     timestamp: new Date().toISOString(),
